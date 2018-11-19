@@ -34,7 +34,7 @@ classifier.add(Dense(512))
 classifier.add(Activation('relu'))
 classifier.add(Dropout(0.5))
 classifier.add(Dense(10))
-classifier.add(Activation('sigmoid'))
+classifier.add(Activation('softmax'))
 
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 classifier.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
