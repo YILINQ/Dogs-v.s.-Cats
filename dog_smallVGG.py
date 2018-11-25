@@ -27,7 +27,7 @@ conv1_size = 3
 conv2_size = 2
 pool_size = 2
 classes_num = 5
-lr = 0.0004
+lr = 0.0004     # learning rate
 
 classifier = Sequential()
 classifier.add(Convolution2D(32, kernel_size=(3, 3),padding='same',input_shape=(64, 64, 3)))
