@@ -43,8 +43,8 @@ class CNNclassification:
 
         my_model.summary()
 
-        sdg = SGD(lr=lr, clipnorm=1.)
-        my_model.compile(loss='categorical_crossentropy', optimizer=sdg, metrics=['accuracy'])
+        sgd = SGD(lr=lr, clipnorm=1.)
+        my_model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
         train_datagen = ImageDataGenerator(
             rescale=1. / 255,
