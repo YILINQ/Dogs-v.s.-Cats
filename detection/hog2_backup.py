@@ -88,22 +88,27 @@ for image in posFiles:
     fileName = os.path.join("test_image", image)
     # print(fileName)
     img = cv.imread(fileName)
-    # imgx = cv.resize(img, (64, 128), interpolation=cv.INTER_AREA)
-    # compute 3780 dimension vector hist
-    # hist = hog_extractor.compute(imgx, (8, 8))
-    # test.append(hist.reshape(-1, 15876)[0])
+
     recs = []
-    winSize = (32, 16)
-    stride = (8, 8)
+    winSize = (int(img.shape[0] * 0.5), int(img.shape[1] * 0.5))
+    stride = (int(winSize[0]*0.2), int(winSize[1] * 0.2))
     for x_ in range(winSize[0], img.shape[1], stride[0]):
         for y_ in range(winSize[1], img.shape[0], stride[1]):
             x = (x_ - winSize[0], x_)
             y = (y_ - winSize[1], y_)
-            img_ = np.copy(img)[y[0]:y[1], x[0]:x[1], :]
+            # img_ = np.zeros(winSize)
+            a = img[y[0]:y[1], x[0]:x[1], :]
+            img_ = cv.resize(a, (64, 128), interpolation=cv.INTER_AREA)
             new_hist = hog_extractor.compute(img_, (8, 8))
-            if svc.predict([new_hist]) == [1]:
+            test = [new_hist.reshape(-1, 15876)[0]]
+            if svc.predict(test) == [1]:
                 recs.append((x[0], y[0], x[1], y[1]))
-    for (x, y, w, h) in recs:
-        cv.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), thickness=2)
+            print(recs)
+    for rec in recs:
+        x = rec[0]
+        x_ = rec[2]
+        y = rec[1]
+        y_ = rec[3]
+        cv.rectangle(img, (x, y), (x_, y_), (255, 255, 0), thickness=2)
     plt.imshow(img)
     plt.show()
