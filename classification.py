@@ -148,7 +148,7 @@ class CNNclassification:
             pickle.dump(self.my_model, handle, protocol=pickle.HIGHEST_PROTOCOL)
         self.pickel_file = 'TraditionalCNNclassifier.pickle'
 
-    def classifier(self, path_to_img):
+    def classify(self, path_to_img):
         """
         path_to_ima is the path to the test input image that we write the data in.
         """
