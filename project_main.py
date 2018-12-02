@@ -12,13 +12,13 @@ matplotlib.use('TkAgg')
 dog_class = ['chihuahua', 'newfoundland', 'pug', 'saint_bernard', 'samoyed']
 cat_class = ['Bengal', 'Bombay', 'Maine_Coon', 'Ragdoll', 'Russian_Blue']
 
-dog_train_path = 'train'
-dog_test_path = 'test'
-dog_detect_test = 'dog_detect_test'
+dog_train_path = '/dog_cat_dataset/dog/train'
+dog_test_path = '/dog_cat_dataset/dog/test'
+dog_svm_test = 'test_svm_dog'
 
-cat_train_path = 'train'
-cat_test_path = 'test'
-cat_detect_test = 'cat_detect_test'
+cat_train_path = '/dog_cat_dataset/cat/train'
+cat_test_path = '/dog_cat_dataset/dog/test'
+cat_svm_test = 'test_svm_cat'
 
 
 def classification_helper(animal_name, model, img_list):
@@ -74,9 +74,9 @@ if __name__ == '__main__':
     pos_data, neg_data, pos_label, neg_label, unscale = DP_dog.transform_data()
     svm_trainer_dog = svm(pos_data, neg_data, pos_label, neg_label, unscale)
     svm_trainer_dog.train_svm()
-    dog_detecor = detect(svm_trainer_dog, image_path="test_svm_dog", hog=hog_extractor, grouped=False)
+    dog_detecor = detect(svm_trainer_dog, image_path=dog_svm_test, hog=hog_extractor, grouped=False)
     dog_detecor.detect_window()
-    dog_detecor = detect(svm_trainer_dog, image_path="test_svm_dog", hog=hog_extractor, grouped=True)
+    dog_detecor = detect(svm_trainer_dog, image_path=dog_svm_test, hog=hog_extractor, grouped=True)
     dog_detecor.detect_window()
     dog_images = dog_detecor.return_detected()
 
@@ -86,9 +86,9 @@ if __name__ == '__main__':
     pos_data, neg_data, pos_label, neg_label, unscale = DP_cat.transform_data()
     svm_trainer_cat = svm(pos_data, neg_data, pos_label, neg_label, unscale)
     svm_trainer_cat.train_svm()
-    cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=False)
+    cat_detecor = detect(svm_trainer_cat, image_path=cat_svm_test, hog=hog_extractor, grouped=False)
     cat_detecor.detect_window()
-    cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=True)
+    cat_detecor = detect(svm_trainer_cat, image_path=cat_svm_test, hog=hog_extractor, grouped=True)
     cat_detecor.detect_window()
     cat_images = cat_detecor.return_detected()
 
