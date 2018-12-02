@@ -1,5 +1,5 @@
 """
-This is a draft version of smallVGG16 for dog
+This is a draft version of smallVGG16 for cat, only for testing
 """
 
 
