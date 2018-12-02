@@ -20,34 +20,42 @@ class data_processor:
         self.pos_label = []
         self.neg_label = []
         self.hog_extractor = hog
+
     def load_data(self):
+        """
+        for loop every image in this folder
+        compute its hist feature
+        put this feature in positve or negative feature array
+        adding corresponding labels, 1 for positive and 0 for negative
+        """
         posFiles = os.listdir(self.posDir)
         for image in posFiles:
             # load positive data
             fileName = os.path.join(self.posDir, image)
-            # print(fileName)
             img = cv.imread(fileName)
             img = cv.resize(img, (64, 128), interpolation=cv.INTER_AREA)
-            # compute 3780 dimension vector hist
+            # compute 15876 dimension vector hist
             hist = self.hog_extractor.compute(img, (8, 8))
-            # can write to a pickle file
             self.pos_array.append(hist.reshape(-1, 15876)[0])
             self.pos_label.append(1)
 
         negFiles = os.listdir(self.negDir)
         for image in negFiles:
-                # load positive data
+            # load negative data
             fileName = os.path.join(self.negDir, image)
-            # print(fileName)
             img = cv.imread(fileName)
             img = cv.resize(img, (64, 128), interpolation=cv.INTER_AREA)
-            # compute 3780 dimension vector hist
+            # compute 15876 dimension vector hist
             hist = self.hog_extractor.compute(img, (8, 8))
-            # can write to a pickle file
             self.neg_array.append(hist.reshape(-1, 15876)[0])
             self.neg_label.append(0)
 
     def transform_data(self):
+        """
+        Use the previous constructed pos array and neg array
+        to construct our feature array
+        """
+        # append
         pos_data = np.asarray(self.pos_array)
         neg_data = np.asarray(self.neg_array)
         unscale = np.vstack((pos_data, neg_data)).astype(np.float64)
@@ -62,11 +70,18 @@ class svm:
         self.pos_label = pos_label
         self.neg_label = neg_label
         self.scaler = StandardScaler().fit(self.unscale)
+        # fit our model with unscaled data
         self.X = self.scaler.transform(unscale)
         self.Y = np.asarray(self.pos_label + self.neg_label)
-        self.svc = SVC(gamma='scale')
+        self.svc = LinearSVC()
+        # self.svc = SVC(gamma='scale')
 
     def train_svm(self):
+        """
+        Fit our SVM model with data
+        Use either LinearSVC or SVC
+        Split a test set with 20% of total data
+        """
         train_data, test_data, train_label, test_label = train_test_split(self.X, self.Y, test_size=0.2,
                                                                           random_state=0)
         self.svc.fit(train_data, train_label)
@@ -80,16 +95,22 @@ class detect:
         self.image_path = image_path
         self.hog_extractor = hog
         self.draw_recs = []
+        self.detected_images = []
         self.grouped = grouped
 
     def detect_window(self):
+        """
+        Use sliding window to detect dogs or cats
+        For every image patch we compute its HOG feature
+        If our svm predict 'positive' on this patch, then we will draw rectangle
+        else we skip this patch and move on to the next one
+        """
         posFiles = os.listdir(self.image_path)
-        test = []
         for image in posFiles:
             fileName = os.path.join(self.image_path, image)
             img = cv.imread(fileName)
-            winSize = (int(img.shape[0] * 0.45), int(img.shape[1] * 0.45))
-            stride = (int(winSize[0] * 0.2), int(winSize[1] * 0.2))
+            winSize = (int(img.shape[0] * 0.5), int(img.shape[1] * 0.5))
+            stride = (int(winSize[0] * 0.1), int(winSize[1] * 0.1))
             for x_ in range(winSize[0], img.shape[1], stride[0]):
                 for y_ in range(winSize[1], img.shape[0], stride[1]):
                     x = (x_ - winSize[0], x_)
@@ -103,6 +124,11 @@ class detect:
             self.draw(img)
 
     def draw(self, img):
+        """
+        For our detected rectangles,
+        if the grouped value is true the we perform grouping them together
+        else we just draw every rectangles
+        """
         grouped = self.grouped
         if grouped:
             x_begins, y_begins, x_ends, y_ends = [], [], [], []
@@ -117,7 +143,10 @@ class detect:
                 y = min(y_begins)
                 x_ = max(x_ends)
                 y_ = max(y_ends)
+                cv.imwrite("out:" + str(img) + ".jpg", img[y:y_, x:x_, :])
                 cv.rectangle(img, (x, y), (x_, y_), (255, 255, 0), thickness=5)
+                # cv.imwrite("output.jpg", img[y:y_, x:x_, :])
+                self.detected_images.append(img[y:y_, x:x_])
         else:
             for rec in self.draw_recs:
                 x = rec[0]
@@ -125,9 +154,11 @@ class detect:
                 y = rec[1]
                 y_ = rec[3]
                 cv.rectangle(img, (x, y), (x_, y_), (0, 0, 255), thickness=5)
-        import random
-        cv.imwrite("detection" + str(random.randint(1, 10000)) + ".jpg", img)
-
+    def return_detected(self):
+        """
+        Return the list of detected images to our CNN model later
+        """
+        return self.detected_images
 if __name__ == "__main__":
     hog_extractor = cv.HOGDescriptor((64, 64), (16, 16), (8, 8), (8, 8), 9)
 
