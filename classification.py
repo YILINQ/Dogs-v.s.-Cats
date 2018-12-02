@@ -1,3 +1,8 @@
+"""
+Final classification class
+"""
+
+
 import pickle
 from keras import optimizers
 from keras.models import Sequential

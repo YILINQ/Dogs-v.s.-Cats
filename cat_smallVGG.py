@@ -1,5 +1,9 @@
-import pickle
+"""
+This is a draft version of smallVGG16 for dog
+"""
 
+
+import pickle
 from keras.applications.vgg16 import VGG16
 from keras.layers import Input, Flatten, Dense
 from keras.models import Model
