@@ -18,24 +18,20 @@ cat_test_path = 'test'
 cat_detect_test = 'cat_detect_test'
 
 
-# train -> test dog [5 types] /cat [5 types]
 def classification_helper(animal_name, model, img_list):
+    """
+    Classification according to dog and cat classes, CNN model
+    and img_list.
+    """
     if animal_name == 'dog':
         my_model = CNNclassification(dog_train_path, dog_test_path)
         if model == 'smallVGG16':
             my_model.smallVGG16()
         elif model == 'traditionalCNN':
             my_model.traditionalCNN()
-        # loop through the images in the directory
-        # dir = os.listdir(dog_test_path)
         img_class = {}
-        # for image in dir:
-        #     fileName = os.path.join(dog_detect_test, image)
-        #     classification = my_model.classifier(fileName)
-        #     categories = classification.index(max(classification))
-        #     img_class[fileName] = categories
         for image in img_list:
-            classification = my_model.classifier(image)
+            classification = my_model.classify(image)
             categories = classification.index(max(classification))
             img_class[image] = categories
 
@@ -52,16 +48,9 @@ def classification_helper(animal_name, model, img_list):
             my_model.smallVGG16()
         elif model == 'traditionalCNN':
             my_model.traditionalCNN()
-        # loop through the images in the directory
-        # dir = os.listdir(cat_test_path)
         img_class = {}
-        # for image in dir:
-        #     fileName = os.path.join(cat_detect_test, image)
-        #     classification = my_model.classifier(fileName)
-        #     categories = classification.index(max(classification))
-        #     img_class[fileName] = categories
         for image in img_list:
-            classification = my_model.classifier(image)
+            classification = my_model.classify(image)
             categories = classification.index(max(classification))
             img_class[image] = categories
 
@@ -76,6 +65,7 @@ if __name__ == '__main__':
     # detection
     hog_extractor = cv.HOGDescriptor((64, 64), (16, 16), (8, 8), (8, 8), 9)
 
+    # test dog images
     DP_dog = data_processor(posPath="dog_pos", negPath="dog_neg", hog=hog_extractor)
     DP_dog.load_data()
     pos_data, neg_data, pos_label, neg_label, unscale = DP_dog.transform_data()
@@ -85,7 +75,9 @@ if __name__ == '__main__':
     dog_detecor.detect_window()
     dog_detecor = detect(svm_trainer_dog, image_path="test_svm_dog", hog=hog_extractor, grouped=True)
     dog_detecor.detect_window()
-    dog_imags = dog_detecor.return_detected()
+    dog_images = dog_detecor.return_detected()
+
+    # test cat images
     DP_cat = data_processor(posPath="cat_pos", negPath="cat_neg", hog=hog_extractor)
     DP_cat.load_data()
     pos_data, neg_data, pos_label, neg_label, unscale = DP_cat.transform_data()
@@ -96,9 +88,12 @@ if __name__ == '__main__':
     cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=True)
     cat_detecor.detect_window()
     cat_images = cat_detecor.return_detected()
-    # classification
-    classification_helper('dog', 'smallVGG16', dog_imags)
-    classification_helper('dog', 'traditionalCNN', cat_images)
 
-    classification_helper('cat', 'smallVGG16')
+    # classify dog
+    classification_helper('dog', 'smallVGG16', dog_images)
+    classification_helper('dog', 'traditionalCNN', dog_images)
+
+    # classify cat
+    classification_helper('cat', 'smallVGG16', cat_images)
+    classification_helper('cat', 'traditionalCNN', cat_images)
 
