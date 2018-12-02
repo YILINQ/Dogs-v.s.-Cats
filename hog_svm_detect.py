@@ -158,6 +158,8 @@ class detect:
         Return the list of detected images to our CNN model later
         """
         return self.detected_images
+
+
 if __name__ == "__main__":
     hog_extractor = cv.HOGDescriptor((64, 64), (16, 16), (8, 8), (8, 8), 9)
 
