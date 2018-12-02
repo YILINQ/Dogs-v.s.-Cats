@@ -1,3 +1,6 @@
+"""
+Plot the dataaccuracy and loss rate of data
+"""
 import matplotlib.pyplot as plt
 
 
