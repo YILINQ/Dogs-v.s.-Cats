@@ -53,6 +53,7 @@ class data_processor:
         unscale = np.vstack((pos_data, neg_data)).astype(np.float64)
         return pos_data, neg_data, self.pos_label, self.neg_label, unscale
 
+
 class svm:
     def __init__(self, pos_data, neg_data, pos_label, neg_label, unscale):
         self.pos_data = pos_data
@@ -87,7 +88,7 @@ class detect:
         for image in posFiles:
             fileName = os.path.join(self.image_path, image)
             img = cv.imread(fileName)
-            winSize = (int(img.shape[0] * 0.5), int(img.shape[1] * 0.5))
+            winSize = (int(img.shape[0] * 0.45), int(img.shape[1] * 0.45))
             stride = (int(winSize[0] * 0.2), int(winSize[1] * 0.2))
             for x_ in range(winSize[0], img.shape[1], stride[0]):
                 for y_ in range(winSize[1], img.shape[0], stride[1]):
@@ -128,12 +129,8 @@ class detect:
         cv.imwrite("detection" + str(random.randint(1, 10000)) + ".jpg", img)
 
 if __name__ == "__main__":
-    winSize = (64, 64)
-    block_size = (16, 16)  # 105
-    blockStride = (8, 8)
-    cellSize = (8, 8)  # 4 cell
-    nBins = 9  # 9 bin 3780 dimension vector
     hog_extractor = cv.HOGDescriptor((64, 64), (16, 16), (8, 8), (8, 8), 9)
+
     DP_dog = data_processor(posPath="dog_pos", negPath="dog_neg", hog=hog_extractor)
     DP_dog.load_data()
     pos_data, neg_data, pos_label, neg_label, unscale = DP_dog.transform_data()
@@ -144,12 +141,12 @@ if __name__ == "__main__":
     dog_detecor = detect(svm_trainer_dog, image_path="test_svm_dog", hog=hog_extractor, grouped=True)
     dog_detecor.detect_window()
 
-    DP_cat = data_processor(posPath="cat_pos", negPath="cat_neg", hog=hog_extractor)
-    DP_cat.load_data()
-    pos_data, neg_data, pos_label, neg_label, unscale = DP_cat.transform_data()
-    svm_trainer_cat = svm(pos_data, neg_data, pos_label, neg_label, unscale)
-    svm_trainer_cat.train_svm()
-    cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=False)
-    cat_detecor.detect_window()
-    cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=True)
-    cat_detecor.detect_window()
+    # DP_cat = data_processor(posPath="cat_pos", negPath="cat_neg", hog=hog_extractor)
+    # DP_cat.load_data()
+    # pos_data, neg_data, pos_label, neg_label, unscale = DP_cat.transform_data()
+    # svm_trainer_cat = svm(pos_data, neg_data, pos_label, neg_label, unscale)
+    # svm_trainer_cat.train_svm()
+    # cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=False)
+    # cat_detecor.detect_window()
+    # cat_detecor = detect(svm_trainer_cat, image_path="test_svm_cat", hog=hog_extractor, grouped=True)
+    # cat_detecor.detect_window()
