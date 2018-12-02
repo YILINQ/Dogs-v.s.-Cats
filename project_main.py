@@ -12,12 +12,12 @@ matplotlib.use('TkAgg')
 dog_class = ['chihuahua', 'newfoundland', 'pug', 'saint_bernard', 'samoyed']
 cat_class = ['Bengal', 'Bombay', 'Maine_Coon', 'Ragdoll', 'Russian_Blue']
 
-dog_train_path = '/dog_cat_dataset/dog/train'
-dog_test_path = '/dog_cat_dataset/dog/test'
+dog_train_path = 'dog_cat_dataset/dog/train'
+dog_test_path = 'dog_cat_dataset/dog/test'
 dog_svm_test = 'test_svm_dog'
 
-cat_train_path = '/dog_cat_dataset/cat/train'
-cat_test_path = '/dog_cat_dataset/dog/test'
+cat_train_path = 'dog_cat_dataset/cat/train'
+cat_test_path = 'dog_cat_dataset/dog/test'
 cat_svm_test = 'test_svm_cat'
 
 
