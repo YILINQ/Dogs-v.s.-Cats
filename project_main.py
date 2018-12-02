@@ -1,4 +1,6 @@
-import os
+"""
+Main function for the whole project.
+"""
 import cv2 as cv
 import matplotlib
 matplotlib.use('TkAgg')
