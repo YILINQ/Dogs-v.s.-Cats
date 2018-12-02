@@ -5,14 +5,11 @@ Detection part of the whole project.
 import cv2 as cv
 import numpy as np
 import os
-from skimage.feature import hog
 import matplotlib
 matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC, LinearSVC
-import pickle
 
 
 class data_processor:
