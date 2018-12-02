@@ -166,6 +166,9 @@ class detect:
         return self.detected_images
 
 
+"""
+This part main is not necessary, but used for test
+"""
 if __name__ == "__main__":
     hog_extractor = cv.HOGDescriptor((64, 64), (16, 16), (8, 8), (8, 8), 9)
 
