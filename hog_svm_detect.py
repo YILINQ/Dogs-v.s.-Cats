@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC, LinearSVC
 import pickle
 
+
 class data_processor:
     def __init__(self, posPath, negPath, hog):
         self.posDir = posPath
@@ -153,6 +154,7 @@ class detect:
                 y = rec[1]
                 y_ = rec[3]
                 cv.rectangle(img, (x, y), (x_, y_), (0, 0, 255), thickness=5)
+
     def return_detected(self):
         """
         Return the list of detected images to our CNN model later
