@@ -1,13 +1,14 @@
 """
 Main function for the whole project.
 """
+from classification import CNNclassification
+from hog_svm_detect import data_processor, svm, detect
+
+import matplotlib.pyplot as plt
 import cv2 as cv
 import matplotlib
 matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
 
-from classification import CNNclassification
-from hog_svm_detect import data_processor, svm, detect
 dog_class = ['chihuahua', 'newfoundland', 'pug', 'saint_bernard', 'samoyed']
 cat_class = ['Bengal', 'Bombay', 'Maine_Coon', 'Ragdoll', 'Russian_Blue']
 
