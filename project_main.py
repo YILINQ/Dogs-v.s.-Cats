@@ -5,7 +5,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 from classification import CNNclassification
-from detection.hog_svm_detect import data_processor, svm, detect
+from hog_svm_detect import data_processor, svm, detect
 dog_class = ['chihuahua', 'newfoundland', 'pug', 'saint_bernard', 'samoyed']
 cat_class = ['Bengal', 'Bombay', 'Maine_Coon', 'Ragdoll', 'Russian_Blue']
 
