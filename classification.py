@@ -17,6 +17,9 @@ import numpy as np
 
 
 class CNNclassification:
+    """
+    CNN model classification class
+    """
 
     def __init__(self, train_dataset, test_dataset):
         self.train_dataset = train_dataset
@@ -26,6 +29,9 @@ class CNNclassification:
         self.pickel_file = None
 
     def smallVGG16(self):
+        """
+        Modified version of small VGG16 together with SGD optimizer.
+        """
         img_width, img_height = 64, 64
         batch_size = 16
         samples_per_epoch = 2500
@@ -86,6 +92,9 @@ class CNNclassification:
         self.pickel_file = 'SMALLVGGclassifier.pickle'
 
     def traditionalCNN(self):
+        """
+        Traditional CNN model with multiple layers.
+        """
         img_width, img_height = 64, 64
         batch_size = 16
         samples_per_epoch = 2500
@@ -155,7 +164,7 @@ class CNNclassification:
 
     def classify(self, path_to_img):
         """
-        path_to_ima is the path to the test input image that we write the data in.
+        path_to_img is the path to the test input image that we write the data in.
         """
         with open(self.pickel_file, 'rb') as handle:
             classifier = pickle.load(handle)
