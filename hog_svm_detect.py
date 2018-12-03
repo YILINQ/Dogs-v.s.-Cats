@@ -11,7 +11,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC, LinearSVC
 
-
 class data_processor:
     def __init__(self, posPath, negPath, hog):
         self.posDir = posPath
@@ -91,13 +90,16 @@ class svm:
 
 
 class detect:
-    def __init__(self, svm, image_path, hog, grouped):
+    def __init__(self, svm, image_path, hog, grouped, name):
         self.svm = svm
         self.image_path = image_path
         self.hog_extractor = hog
         self.draw_recs = []
         self.detected_images = []
+        self.detected_paths = []
         self.grouped = grouped
+        self.type = name
+
 
     def detect_window(self):
         """
@@ -160,7 +162,11 @@ class detect:
         """
         Return the list of detected images to our CNN model later
         """
-        return self.detected_images
+        paths = []
+        for i in range(len(self.detected_images)):
+            cv.imwrite(self.type + " detected " + str(i) + ".jpg", self.detected_images[i])
+            paths.append(self.type + " detected " + str(i) + ".jpg")
+        return self.detected_images, paths
 
 
 """
